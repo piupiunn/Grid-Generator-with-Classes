@@ -1,30 +1,25 @@
-class Grid {
-  //row ve column özellikleri
-  constructor(rowsGridNumber, columnsGridNumber) {
-    this.rowsGridNumber = parseInt(document.querySelector(".rows-grid").value);
-    this.columnsGridNumber = parseInt(
-      document.querySelector(".columns-grid").value
-    );
+//Table class'ından türettiğimiz ikinci bir class'ımız olsun. Ve bu class table yerine css'le grid çizsin.
+class Grid extends Table {
+  //rowsNumber ve columnsNumber özellikleri Table classından miras alınıyor.
+  constructor(rowsNumber, columnsNumber) {
+    super(rowsNumber, columnsNumber);
   }
   //Oluşturulan class'tan nesne üretmeye gerek kalmadan oluşturduğumuz metodu kullanabilmek için, metodu static olarak ekledim.
+  //Bu metoda Table class'ında ki createGrid metoduyla aynı isim verilip, içi bu classta farklı tanımlanarak farklı işlev veriliyor.
   static createGrid() {
     //Grid'in çizileceği container'ı seçmek. Kutular burda dizilecek.
     const container = document.getElementById("container");
-    //Sayfa yenilenmeden ikinci bir table oluşturulmak istenirse, önceki table'ın üstüne yazmaması için fonksiyon her çalıştığında ilk başta boş değer üzerinden ilerliyor.
+    //Sayfa yenilenmeden ikinci bir grid oluşturulmak istenirse, önceki grid'in üstüne yazmaması için fonksiyon her çalıştığında ilk başta boş değer üzerinden ilerliyor.
     container.innerHTML = "";
-    //Row inputunu tam sayıyla almak
-    this.rowsGridNumber = parseInt(document.querySelector(".rows-grid").value);
-    //Grid inputunu tam sayıyla almak
-    this.columnsGridNumber = parseInt(
-      document.querySelector(".columns-grid").value
-    );
 
-    //Grid'in çizileceği container'a setProperty ile kaç tane kutu olacağını iletmek. İlk değer css üzerinden custom oluşturduğumuz ve 1 atadığımız değer. İkinci değer ise inputtan gelen değer. setProperty ile oluşturduğumuz css değerini inputtan gelecek olan değere eştliyoruz.
-    container.style.setProperty("--grid-rows", this.rowsGridNumber);
-    container.style.setProperty("--grid-cols", this.columnsGridNumber);
+    //Grid'in çizileceği container'a setProperty ile kaç tane kutu olacağını iletmek. İlk değer css üzerinden custom oluşturduğumuz ve 1 atadığımız değer.
+    //İkinci değer ise inputtan gelen değer. setProperty ile oluşturduğumuz css değerini inputtan gelecek olan değere eştliyoruz.
+    //Yani inputlardan ne değer gelirse --grid-rows ve --grid-cols css'deki 1 yerine inputtaki değerleri alacak.
+    container.style.setProperty("--grid-rows", this.rowsNumber);
+    container.style.setProperty("--grid-cols", this.columnsNumber);
 
     //Input değerine girilen sayılar kadar grid çizilmesi için input değerlerini çarpıp çıkan sonuca kadar dönüyoruz.
-    for (let c = 0; c < this.rowsGridNumber * this.columnsGridNumber; c++) {
+    for (let c = 0; c < this.rowsNumber * this.columnsNumber; c++) {
       //Gridlerimizi div ile oluşturmak için div oluşturuyoruz.
       let cell = document.createElement("div");
       //Oluşturduğumuz divlerin içine kaçıncı div olduğunu yazmak
@@ -35,7 +30,9 @@ class Grid {
   }
 }
 //Metodumuzu çalıştırmak için eventlistener ataması yapmak. Static metod olduğu için direkt class üzerinden çağırılabilir.
-document.querySelector(".button-grid-maker").addEventListener("click", () => {
-  Grid.createGrid();
-  console.log((b = new Grid()));
-});
+document
+  .querySelector(".button-table-generator")
+  .addEventListener("click", () => {
+    Grid.createGrid();
+    console.log((b = new Grid()));
+  });

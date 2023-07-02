@@ -1,12 +1,30 @@
 class Table {
-  // row ve column özellikleri
+  //Class'ın dışardan değiştirilmesini istemediğimiz bir isim özelliği olsun. Bu yüzden private metodla ismi belirliyorum.
+  #name = "Grid Generator";
+  // row ve column özellikleri. Bunlar inputlara girilecek olan değerler.Tam sayı olarak almak için parseInt
   constructor(rowsNumber, columnsNumber) {
     this.rowsNumber = parseInt(document.querySelector(".rows").value);
     this.columnsNumber = parseInt(document.querySelector(".columns").value);
   }
 
+  //Class'ın isim özelliğini çağırmak için
+  get tableGeneratorName() {
+    return this.#name;
+  }
+
+  //Class'ın isim özelliğini set metoduyla belirlediğimiz ölçülerde, ne kadar değişmesine müsade etmek istediğimize göre şartlıyoruz.
+  //name hem private özellik olduğundan dışardan erişilip değiştirilemeyecek
+  //hem de eğer değiştirilirse de belirlediğimiz ölçütler olan "yazı olmalı" ve "20 karakterden küçük olmalı" şartlarının dışına çıkamayacak.
+  set tableGeneratorName(value) {
+    if (typeof value === "string" && value.length <= 20) {
+      this.#name = value;
+    } else {
+      throw "Generator ismi sadece 20 karakterden küçük yazı olabilir.";
+    }
+  }
+
   //Oluşturulan class'tan nesne üretmeye gerek kalmadan oluşturduğumuz metodu kullanabilmek için, metodu static olarak ekledim.
-  static generateTable = () => {
+  static createGrid = () => {
     //Sayfa yenilenmeden ikinci bir table oluşturulmak istenirse, önceki table'ın üstüne yazmaması için fonksiyon her çalıştığında ilk başta boş değer üzerinden ilerliyor.
     let tableHTML = "";
 
@@ -20,7 +38,8 @@ class Table {
 
       //Column inputuna girilen değere kadar dönmek. Row'la içiçeler ki senkronize şekilde iki farklı input değerine göre kutular oluşsun.
       for (let c = 1; c <= this.columnsNumber; c++) {
-        //Hem toplam kutu sayısına ulaşmak, hemde kutulara kendi sayılarını vermek için, r ve c değerlerini input değerlerine kadar çarpmak. Örneğin ilk satır 1*1 1*2 1*3, ikinci satır 2*1 2*2 2*3 gibi.
+        //Hem toplam kutu sayısına ulaşmak, hemde kutulara kendi sayılarını vermek için, r ve c değerlerini input değerlerine kadar çarpmak.
+        //Örneğin ilk satır 1*1 1*2 1*3, ikinci satır 2*1 2*2 2*3 gibi.
         const cellContent = r * c;
         let td = `<td>${cellContent}</td>`;
         //Table içini doldurmak
@@ -38,6 +57,14 @@ class Table {
 document
   .querySelector(".button-table-generator")
   .addEventListener("click", () => {
-    Table.generateTable();
+    Table.createGrid();
     console.log((a = new Table()));
   });
+
+//name özelliğinin doğruluğunu kontrol etmek için
+const firstTableGenerator = new Table();
+console.log(firstTableGenerator);
+
+firstTableGenerator.tableGeneratorName = "caner";
+console.log(firstTableGenerator);
+firstTableGenerator.tableGeneratorName = 123;
